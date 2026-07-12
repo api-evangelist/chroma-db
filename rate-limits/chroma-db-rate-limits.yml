@@ -1,0 +1,68 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Chroma
+providerId: chroma-db
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Vector Database
+- Embeddings
+- Vector Search
+- Rate Limiting
+- Quotas
+description: >-
+  Chroma does not publish fixed numeric request-rate limits for its v2 REST API.
+  On self-hosted (open-source) deployments, throughput is bounded only by your
+  own hardware, and the server advertises operational limits - notably a maximum
+  batch size - via the GET /api/v2/pre-flight-checks endpoint that clients read
+  before writing. On Chroma Cloud, capacity is governed by usage-based metering
+  (data written, stored, queried, and network egress) and per-plan limits such
+  as the number of databases and team members, rather than by a documented
+  per-minute request cap.
+notes: >-
+  Numeric per-account or per-endpoint request limits are not documented as of
+  the review date. Respect the max_batch_size returned by
+  /api/v2/pre-flight-checks when adding records, and verify any Cloud quotas on
+  the pricing page during reconciliation.
+sources:
+- https://docs.trychroma.com/reference/chroma-reference
+- https://www.trychroma.com/pricing
+- https://github.com/chroma-core/chroma
+responseCodes:
+  throttled: 429
+limits:
+- name: REST API Requests
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the v2 REST API.
+- name: Self-Hosted Throughput
+  scope: deployment
+  metric: operations
+  limit: hardware-bound
+  notes: Constrained by your own infrastructure, not by Chroma.
+- name: Write Batch Size
+  scope: request
+  metric: records
+  limit: server max_batch_size
+  notes: The maximum records per add/upsert/update call is advertised via GET /api/v2/pre-flight-checks.
+- name: Cloud Usage Metering
+  scope: account
+  metric: bytes
+  limit: per plan / usage-based
+  notes: Chroma Cloud meters data written, stored, queried, and network egress; capacity scales with spend.
+- name: Cloud Database Count
+  scope: account
+  metric: databases
+  limit: per plan (Starter ~10, Team ~100, Enterprise unlimited)
+  notes: Plan-level limit on number of databases rather than a request rate.
+policies:
+- name: Batch Sizing
+  description: Clients should chunk writes to stay within the server's advertised max_batch_size from pre-flight-checks.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

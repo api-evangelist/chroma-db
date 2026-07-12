@@ -1,0 +1,304 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2)",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{chromaToken}}",
+      "in": "header"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "System", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Heartbeat", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.trychroma.com/api/v2/heartbeat" },
+          "docs": "Returns the current server time in nanoseconds; liveness check."
+        },
+        {
+          "info": { "name": "Health check", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.trychroma.com/api/v2/healthcheck" },
+          "docs": "Returns the health status of the server."
+        },
+        {
+          "info": { "name": "Get server version", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.trychroma.com/api/v2/version" },
+          "docs": "Returns the Chroma server version string."
+        },
+        {
+          "info": { "name": "Pre-flight checks", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.trychroma.com/api/v2/pre-flight-checks" },
+          "docs": "Returns server limits and configuration, such as the maximum batch size."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Tenants and Databases", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a tenant", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants",
+            "body": { "type": "json", "data": "{\n  \"name\": \"my-tenant\"\n}" }
+          },
+          "docs": "Creates a new tenant."
+        },
+        {
+          "info": { "name": "Get a tenant", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." }
+            ]
+          },
+          "docs": "Retrieves a tenant by name."
+        },
+        {
+          "info": { "name": "List databases", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." }
+            ]
+          },
+          "docs": "Lists the databases within a tenant."
+        },
+        {
+          "info": { "name": "Create a database", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"my-database\"\n}" }
+          },
+          "docs": "Creates a new database within a tenant."
+        },
+        {
+          "info": { "name": "Get a database", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." }
+            ]
+          },
+          "docs": "Retrieves a database by name within a tenant."
+        },
+        {
+          "info": { "name": "Delete a database", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." }
+            ]
+          },
+          "docs": "Deletes a database and all collections within it."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Collections", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List collections", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." }
+            ]
+          },
+          "docs": "Lists collections in a database."
+        },
+        {
+          "info": { "name": "Create a collection", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"my-collection\",\n  \"get_or_create\": true\n}" }
+          },
+          "docs": "Creates a new collection (named vector store) in a database."
+        },
+        {
+          "info": { "name": "Count collections", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections_count",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." }
+            ]
+          },
+          "docs": "Returns the number of collections in a database."
+        },
+        {
+          "info": { "name": "Get a collection", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ]
+          },
+          "docs": "Retrieves a collection by ID."
+        },
+        {
+          "info": { "name": "Update a collection", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"new_name\": \"renamed-collection\"\n}" }
+          },
+          "docs": "Updates a collection's name, metadata, or index configuration."
+        },
+        {
+          "info": { "name": "Delete a collection", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ]
+          },
+          "docs": "Deletes a collection and all of its records."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Records", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Add records", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/add",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"ids\": [\"id1\"],\n  \"embeddings\": [[0.1, 0.2, 0.3]],\n  \"documents\": [\"hello world\"],\n  \"metadatas\": [{\"source\": \"demo\"}]\n}" }
+          },
+          "docs": "Adds records (embeddings, documents, metadata, URIs) to a collection."
+        },
+        {
+          "info": { "name": "Upsert records", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/upsert",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"ids\": [\"id1\"],\n  \"embeddings\": [[0.1, 0.2, 0.3]]\n}" }
+          },
+          "docs": "Inserts new records or updates existing records matched by id."
+        },
+        {
+          "info": { "name": "Update records", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/update",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"ids\": [\"id1\"],\n  \"metadatas\": [{\"source\": \"updated\"}]\n}" }
+          },
+          "docs": "Updates embeddings, documents, metadata, or URIs of existing records by id."
+        },
+        {
+          "info": { "name": "Get records", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/get",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"ids\": [\"id1\"],\n  \"include\": [\"documents\", \"metadatas\"]\n}" }
+          },
+          "docs": "Retrieves records by id and/or metadata and document filters."
+        },
+        {
+          "info": { "name": "Count records", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/count",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ]
+          },
+          "docs": "Returns the number of records in a collection."
+        },
+        {
+          "info": { "name": "Delete records", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/delete",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"ids\": [\"id1\"]\n}" }
+          },
+          "docs": "Deletes records by id and/or by metadata and document filters."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Query", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Query a collection (similarity search)", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/query",
+            "params": [
+              { "name": "tenant", "value": "", "type": "path", "description": "Tenant name or UUID." },
+              { "name": "database", "value": "", "type": "path", "description": "Database name." },
+              { "name": "collection_id", "value": "", "type": "path", "description": "Collection UUID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"query_embeddings\": [[0.1, 0.2, 0.3]],\n  \"n_results\": 10,\n  \"include\": [\"documents\", \"distances\", \"metadatas\"]\n}" }
+          },
+          "docs": "Runs nearest-neighbor vector similarity search with optional where and where_document filters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

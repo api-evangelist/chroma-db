@@ -1,0 +1,174 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Chroma
+providerId: chroma-db
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Vector Database
+- Embeddings
+- Vector Search
+- Open Source
+- Plans
+description: >-
+  Chroma has two consumption models. The core Chroma server is open source
+  (Apache 2.0) and free to self-host with no license fee - your only cost is the
+  infrastructure you run it on. Chroma Cloud is the managed, serverless offering
+  billed on usage. Cloud tiers observed on the pricing page: a Starter plan at
+  $0/month with free credits, a Team plan with a monthly base plus usage, and a
+  custom Enterprise plan. Cloud usage is metered on data written, data stored,
+  data queried, and network egress rather than on a fixed per-request price.
+notes: >-
+  Dollar amounts below were captured from the Chroma pricing page and are marked
+  reconciled:false - verify current rates, credits, and plan limits on
+  https://www.trychroma.com/pricing before relying on them. Self-hosting the
+  open-source server has no Chroma fee at all.
+sources:
+- https://www.trychroma.com/pricing
+- https://docs.trychroma.com/docs/overview/introduction
+- https://github.com/chroma-core/chroma
+plans:
+- id: chroma-open-source
+  name: Open Source (Self-Hosted)
+  type: free
+  description: >-
+    The full Chroma vector database, Apache-2.0 licensed and self-hostable as a
+    single server (default port 8000). Includes collections, records, metadata
+    filtering, full-text and regex search, multi-modal retrieval, and the v2
+    REST API. No Chroma fee; bounded only by your own infrastructure.
+  entries:
+  - label: Self-Hosted Usage
+    name: self_hosted_usage
+    type: usage
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (self-hosted; you provide infrastructure)
+    userMultiplied: false
+  elements:
+  - name: Collections and Records
+  - name: Vector Similarity Search
+  - name: Metadata and Full-Text Filtering
+  - name: v2 REST API
+- id: chroma-cloud-starter
+  name: Chroma Cloud - Starter
+  type: usage
+  description: >-
+    Serverless managed tier starting at $0/month with $5 in free credits, then
+    usage-based rates. Observed limits: up to 10 databases and 10 team members.
+    No minimum spend.
+  entries:
+  - label: Monthly Base
+    name: starter_base
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 per month (includes $5 free credits)
+    userMultiplied: false
+  - label: Data Written
+    name: writes
+    type: usage
+    metric: bytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1073741824
+    price: $2.50 per GiB written (modeled; verify)
+    userMultiplied: false
+  - label: Data Stored
+    name: storage
+    type: usage
+    metric: bytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1073741824
+    price: $0.33 per GiB stored per month (modeled; verify)
+    userMultiplied: false
+  - label: Data Queried
+    name: queries
+    type: usage
+    metric: bytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1099511627776
+    price: $0.0075 per TiB queried (modeled; verify)
+    userMultiplied: false
+  - label: Network Egress
+    name: network
+    type: usage
+    metric: bytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1073741824
+    price: $0.09 per GiB returned (modeled; verify)
+    userMultiplied: false
+  elements:
+  - name: Serverless Managed Hosting
+  - name: Up To 10 Databases
+  - name: Up To 10 Team Members
+- id: chroma-cloud-team
+  name: Chroma Cloud - Team
+  type: usage
+  description: >-
+    Managed tier with a monthly base fee plus usage, higher limits (up to 100
+    databases, 30 team members), $100 monthly credits, and volume-based
+    discounts.
+  entries:
+  - label: Monthly Base
+    name: team_base
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $250 per month (includes $100 monthly credits; modeled, verify)
+    userMultiplied: false
+  - label: Usage Above Credits
+    name: team_usage
+    type: usage
+    metric: bytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1073741824
+    price: usage-based (writes / storage / queries / network; see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Higher Limits
+  - name: Volume Discounts
+  - name: Up To 100 Databases
+- id: chroma-cloud-enterprise
+  name: Chroma Cloud - Enterprise
+  type: enterprise
+  description: >-
+    Custom plan with dedicated support, single-tenant clusters, SLAs, and
+    unlimited databases and members. Contact Chroma.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Single-Tenant Clusters
+  - name: SLAs and Dedicated Support
+  - name: Unlimited Databases and Members
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

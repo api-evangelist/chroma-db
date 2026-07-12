@@ -1,0 +1,266 @@
+{
+  "info": {
+    "name": "Chroma Server API (v2)",
+    "description": "Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This collection covers the HTTP/REST v2 API - tenants, databases, collections, records, and vector similarity query. Base URL: https://api.trychroma.com (Chroma Cloud) or http://localhost:8000 (self-hosted). Chroma Cloud requires an API key in the x-chroma-token header. NOTE: endpoint paths follow Chroma's documented v2 structure and the confirmed query endpoint; request bodies are modeled examples - verify against your server's /openapi.json.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "x-chroma-token", "type": "string" },
+      { "key": "value", "value": "{{chromaToken}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.trychroma.com", "type": "string" },
+    { "key": "chromaToken", "value": "", "type": "string" },
+    { "key": "tenant", "value": "default_tenant", "type": "string" },
+    { "key": "database", "value": "default_database", "type": "string" },
+    { "key": "collection_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Heartbeat",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/heartbeat", "host": ["{{baseUrl}}"], "path": ["api", "v2", "heartbeat"] },
+            "description": "Returns the current server time in nanoseconds; liveness check."
+          }
+        },
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/healthcheck", "host": ["{{baseUrl}}"], "path": ["api", "v2", "healthcheck"] },
+            "description": "Returns the health status of the server."
+          }
+        },
+        {
+          "name": "Get server version",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/version", "host": ["{{baseUrl}}"], "path": ["api", "v2", "version"] },
+            "description": "Returns the Chroma server version string."
+          }
+        },
+        {
+          "name": "Pre-flight checks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/pre-flight-checks", "host": ["{{baseUrl}}"], "path": ["api", "v2", "pre-flight-checks"] },
+            "description": "Returns server limits and configuration, such as the maximum batch size."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tenants and Databases",
+      "item": [
+        {
+          "name": "Create a tenant",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"my-tenant\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants"] },
+            "description": "Creates a new tenant."
+          }
+        },
+        {
+          "name": "Get a tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}"] },
+            "description": "Retrieves a tenant by name."
+          }
+        },
+        {
+          "name": "List databases",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases"] },
+            "description": "Lists the databases within a tenant."
+          }
+        },
+        {
+          "name": "Create a database",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"my-database\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases"] },
+            "description": "Creates a new database within a tenant."
+          }
+        },
+        {
+          "name": "Get a database",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}"] },
+            "description": "Retrieves a database by name within a tenant."
+          }
+        },
+        {
+          "name": "Delete a database",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}"] },
+            "description": "Deletes a database and all collections within it."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collections",
+      "item": [
+        {
+          "name": "List collections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections"] },
+            "description": "Lists collections in a database."
+          }
+        },
+        {
+          "name": "Create a collection",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"my-collection\",\n  \"get_or_create\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections"] },
+            "description": "Creates a new collection (named vector store) in a database."
+          }
+        },
+        {
+          "name": "Count collections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections_count", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections_count"] },
+            "description": "Returns the number of collections in a database."
+          }
+        },
+        {
+          "name": "Get a collection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}"] },
+            "description": "Retrieves a collection by ID."
+          }
+        },
+        {
+          "name": "Update a collection",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"new_name\": \"renamed-collection\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}"] },
+            "description": "Updates a collection's name, metadata, or index configuration."
+          }
+        },
+        {
+          "name": "Delete a collection",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}"] },
+            "description": "Deletes a collection and all of its records."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Records",
+      "item": [
+        {
+          "name": "Add records",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ids\": [\"id1\"],\n  \"embeddings\": [[0.1, 0.2, 0.3]],\n  \"documents\": [\"hello world\"],\n  \"metadatas\": [{\"source\": \"demo\"}]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/add", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "add"] },
+            "description": "Adds records (embeddings, documents, metadata, URIs) to a collection."
+          }
+        },
+        {
+          "name": "Upsert records",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ids\": [\"id1\"],\n  \"embeddings\": [[0.1, 0.2, 0.3]]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/upsert", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "upsert"] },
+            "description": "Inserts new records or updates existing records matched by id."
+          }
+        },
+        {
+          "name": "Update records",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ids\": [\"id1\"],\n  \"metadatas\": [{\"source\": \"updated\"}]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/update", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "update"] },
+            "description": "Updates embeddings, documents, metadata, or URIs of existing records by id."
+          }
+        },
+        {
+          "name": "Get records",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ids\": [\"id1\"],\n  \"include\": [\"documents\", \"metadatas\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/get", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "get"] },
+            "description": "Retrieves records by id and/or metadata and document filters."
+          }
+        },
+        {
+          "name": "Count records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/count", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "count"] },
+            "description": "Returns the number of records in a collection."
+          }
+        },
+        {
+          "name": "Delete records",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ids\": [\"id1\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/delete", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "delete"] },
+            "description": "Deletes records by id and/or by metadata and document filters."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Query",
+      "item": [
+        {
+          "name": "Query a collection (similarity search)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query_embeddings\": [[0.1, 0.2, 0.3]],\n  \"n_results\": 10,\n  \"include\": [\"documents\", \"distances\", \"metadatas\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v2/tenants/{{tenant}}/databases/{{database}}/collections/{{collection_id}}/query", "host": ["{{baseUrl}}"], "path": ["api", "v2", "tenants", "{{tenant}}", "databases", "{{database}}", "collections", "{{collection_id}}", "query"] },
+            "description": "Runs nearest-neighbor vector similarity search with optional where and where_document filters."
+          }
+        }
+      ]
+    }
+  ]
+}

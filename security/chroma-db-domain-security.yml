@@ -1,0 +1,32 @@
+generated: '2026-07-12'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: trychroma.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 20 00:20:16 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: docs.trychroma.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 28 19:05:27 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: api.trychroma.com
+  https: true
+  cert_expires: Jan 11 23:59:59 2027 GMT
+  hsts: false
+  note: Root path returns HTTP 404 (API base; v2 endpoints live under /api/v2). Valid TLS cert; HSTS header not observed on this host.
+domains:
+- domain: trychroma.com
+  dnssec: false
+  caa: []
+  spf: true
+  spf_record: v=spf1 include:_spf.google.com ~all
+  dmarc: true
+  dmarc_policy: reject
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

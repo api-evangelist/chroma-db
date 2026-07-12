@@ -1,0 +1,22 @@
+generated: '2026-07-12'
+method: derived
+source: openapi/chroma-db-openapi.yml
+summary:
+  types:
+  - apiKey
+schemes:
+- name: chromaToken
+  type: apiKey
+  in: header
+  headerName: x-chroma-token
+  description: >-
+    Chroma Cloud API key passed in the `x-chroma-token` request header. Create the
+    key in the Chroma Cloud dashboard; the tenant and database names for your
+    Cloud instance are supplied alongside it. Self-hosted (open-source) Chroma
+    servers can run with no authentication (default) or be configured with a
+    static token (also carried in x-chroma-token, or Authorization Bearer) or
+    HTTP basic auth by the operator. Chroma Cloud always requires a token.
+  sources:
+  - openapi/chroma-db-openapi.yml
+  - https://docs.trychroma.com/reference/chroma-api/record/query-collection
+  - https://docs.trychroma.com/production/administration/auth

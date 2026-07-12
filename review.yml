@@ -1,0 +1,123 @@
+aid: chroma-db
+name: Chroma
+review:
+  question: Does Chroma expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-12'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Chroma's public interface is a
+    request/response HTTP/REST v2 API (base https://api.trychroma.com on Chroma
+    Cloud, or http://localhost:8000 self-hosted). There is no server-push
+    transport - no WebSocket (wss://) and no Server-Sent Events - documented on
+    Chroma's own API. Vector similarity search is performed by POSTing query
+    embeddings to a /query endpoint and receiving a single JSON response, so
+    there is no streaming surface to model.
+findings:
+  summary: |
+    Chroma does not publish a documented public WebSocket API. Chroma is an
+    open-source, AI-native vector (embedding) database. Its public surface is
+    an HTTP/REST v2 API organized as tenants -> databases -> collections ->
+    records, authenticated on Chroma Cloud with an API token passed in the
+    x-chroma-token header. All documented operations - creating collections,
+    adding/upserting/updating/getting/deleting records, and querying by vector
+    similarity - are request/response over HTTPS. No realtime, bidirectional,
+    or streaming WebSocket (ws:// or wss://) endpoint is documented anywhere in
+    Chroma's reference docs or client libraries as of the review date.
+  openSource: |
+    The Chroma core server is open source (Apache 2.0), self-hostable as a
+    single server (github.com/chroma-core/chroma), and defaults to port 8000.
+    Chroma Cloud is a managed, serverless, usage-based offering on
+    https://api.trychroma.com that uses the same v2 REST API. Self-hosted
+    servers can run open (no auth) or with static-token / basic auth; Chroma
+    Cloud always requires an API token.
+  accessModel: |
+    Two deployment models share one API. (1) Self-hosted OSS: run the Chroma
+    server locally or in your own infrastructure; base http://localhost:8000;
+    authentication is optional and configured by the operator. (2) Chroma
+    Cloud: managed serverless; base https://api.trychroma.com; API key required
+    in the x-chroma-token header; tenant and database are supplied from your
+    Cloud instance. Client libraries (Python, JS/TS, Rust, and others) wrap the
+    same v2 REST endpoints.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.trychroma.com
+      documented: true
+      note: Chroma Cloud v2 REST API. Self-hosted base is http://your-host:8000.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in Chroma's reference docs, client libraries, or server sources as of the review date.
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming is documented on Chroma's API. Query is a single request/response.
+  endpointsConfirmed:
+    - POST https://api.trychroma.com/api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/query
+    - note: >-
+        The query-collection endpoint (method, path, path params, request body
+        fields query_embeddings/n_results/include/ids/where/where_document, and
+        the x-chroma-token auth header) is confirmed directly against the
+        official Chroma reference documentation
+        (docs.trychroma.com/reference/chroma-api/record/query-collection).
+  endpointsModeled:
+    note: >-
+      The remaining endpoints below follow Chroma's documented v2 path
+      structure (tenants -> databases -> collections -> records) and documented
+      client operations, but their exact request/response JSON schemas were
+      MODELED by API Evangelist and were not each byte-verified against a live
+      server. Chroma ships a generated openapi.json at /openapi.json on any
+      running server; treat that as authoritative over the modeled schemas here.
+    paths:
+      - GET    /api/v2/heartbeat
+      - GET    /api/v2/healthcheck
+      - GET    /api/v2/version
+      - GET    /api/v2/pre-flight-checks
+      - POST   /api/v2/reset
+      - POST   /api/v2/tenants
+      - GET    /api/v2/tenants/{tenant}
+      - POST   /api/v2/tenants/{tenant}/databases
+      - GET    /api/v2/tenants/{tenant}/databases
+      - GET    /api/v2/tenants/{tenant}/databases/{database}
+      - DELETE /api/v2/tenants/{tenant}/databases/{database}
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections
+      - GET    /api/v2/tenants/{tenant}/databases/{database}/collections
+      - GET    /api/v2/tenants/{tenant}/databases/{database}/collections_count
+      - GET    /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}
+      - PUT    /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}
+      - DELETE /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}
+      - GET    /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/count
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/add
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/upsert
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/update
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/get
+      - POST   /api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/delete
+sources:
+  - url: https://docs.trychroma.com/reference/chroma-api/record/query-collection
+    type: APIReference
+    note: Confirms the query endpoint method, path, path params, body, and x-chroma-token auth.
+  - url: https://docs.trychroma.com/reference/chroma-reference
+    type: APIReference
+    note: Chroma API / Sync API / Embeddings API reference index; v2 REST surface.
+  - url: https://docs.trychroma.com/docs/overview/introduction
+    type: Documentation
+    note: Open-source (Apache 2.0), self-hosted vs Chroma Cloud, SDK and REST API.
+  - url: https://www.trychroma.com/pricing
+    type: Pricing
+    note: Chroma Cloud usage-based pricing (writes, storage, queries, network) and plans.
+  - url: https://github.com/chroma-core/chroma
+    type: SourceCode
+    note: Open-source Chroma server; default port 8000; serves generated openapi.json.
+  - url: https://cookbook.chromadb.dev/core/api/
+    type: Documentation
+    note: Community cookbook; openapi.json generation and v2 client/API structure.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists on Chroma's own API. Chroma's public
+    interface is request/response HTTP/REST v2 (collections and vector
+    similarity search via POST /query). No AsyncAPI document was created because
+    there is no server-push transport (WebSocket or SSE) to model.
