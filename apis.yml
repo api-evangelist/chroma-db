@@ -147,6 +147,8 @@ apis:
     version, and pre-flight checks. On self-hosted deployments a reset endpoint can
     clear all data when explicitly enabled.
 common:
+- type: AgenticAccess
+  url: agentic-access/chroma-db-agentic-access.yml
 - type: DomainSecurity
   url: security/chroma-db-domain-security.yml
 - type: Authentication
