@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Chroma Server API (v2) Collections System API
+  description: 'Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma''s HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.
+
+    ENDPOINTS MODELED: Path structure and the query-collection contract are grounded in the official Chroma reference docs (docs.trychroma.com) and the chroma-core sources. The exact request/response JSON SCHEMAS in this document are MODELED by API Evangelist from the documented client behavior and may differ in field-level detail from Chroma''s own generated openapi.json served at `/openapi.json` on a running server. Treat schemas as representative, not authoritative; verify against your server''s `/openapi.json`.'
+  version: '2.0'
+  contact:
+    name: Chroma
+    url: https://www.trychroma.com
+  license:
+    name: Apache 2.0
+    url: https://github.com/chroma-core/chroma/blob/main/LICENSE
+servers:
+- url: https://api.trychroma.com
+  description: Chroma Cloud (managed, serverless)
+- url: http://localhost:8000
+  description: Local development / self-hosted Chroma server (default port 8000)
+security:
+- chromaToken: []
+tags:
+- name: System
+  description: Server health, version, and pre-flight operational endpoints.
+paths:
+  /api/v2/heartbeat:
+    get:
+      operationId: heartbeat
+      tags:
+      - System
+      summary: Heartbeat
+      description: Returns the current server time in nanoseconds; used as a liveness check.
+      security: []
+      responses:
+        '200':
+          description: Server heartbeat.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nanosecond heartbeat:
+                    type: integer
+                    format: int64
+  /api/v2/healthcheck:
+    get:
+      operationId: healthcheck
+      tags:
+      - System
+      summary: Health check
+      description: Returns the health status of the server.
+      security: []
+      responses:
+        '200':
+          description: Health status.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v2/version:
+    get:
+      operationId: version
+      tags:
+      - System
+      summary: Get server version
+      description: Returns the Chroma server version string.
+      security: []
+      responses:
+        '200':
+          description: Version string.
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v2/pre-flight-checks:
+    get:
+      operationId: preFlightChecks
+      tags:
+      - System
+      summary: Pre-flight checks
+      description: Returns server limits and configuration used by clients before issuing requests, such as the maximum batch size.
+      responses:
+        '200':
+          description: Pre-flight configuration.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  max_batch_size:
+                    type: integer
+                additionalProperties: true
+  /api/v2/reset:
+    post:
+      operationId: reset
+      tags:
+      - System
+      summary: Reset the database
+      description: Deletes all data in the server. Only available on self-hosted deployments when ALLOW_RESET is explicitly enabled; not available on Chroma Cloud.
+      responses:
+        '200':
+          description: Reset result.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    chromaToken:
+      type: apiKey
+      in: header
+      name: x-chroma-token
+      description: Chroma Cloud API key passed in the `x-chroma-token` header. Self-hosted servers can be run open (no auth) or configured with static-token or basic authentication; Chroma Cloud always requires a token.

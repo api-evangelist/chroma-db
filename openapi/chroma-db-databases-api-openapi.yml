@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Chroma Server API (v2) Collections Databases API
+  description: 'Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma''s HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.
+
+    ENDPOINTS MODELED: Path structure and the query-collection contract are grounded in the official Chroma reference docs (docs.trychroma.com) and the chroma-core sources. The exact request/response JSON SCHEMAS in this document are MODELED by API Evangelist from the documented client behavior and may differ in field-level detail from Chroma''s own generated openapi.json served at `/openapi.json` on a running server. Treat schemas as representative, not authoritative; verify against your server''s `/openapi.json`.'
+  version: '2.0'
+  contact:
+    name: Chroma
+    url: https://www.trychroma.com
+  license:
+    name: Apache 2.0
+    url: https://github.com/chroma-core/chroma/blob/main/LICENSE
+servers:
+- url: https://api.trychroma.com
+  description: Chroma Cloud (managed, serverless)
+- url: http://localhost:8000
+  description: Local development / self-hosted Chroma server (default port 8000)
+security:
+- chromaToken: []
+tags:
+- name: Databases
+  description: Logical grouping of collections within a tenant.
+paths:
+  /api/v2/tenants/{tenant}/databases:
+    parameters:
+    - $ref: '#/components/parameters/Tenant'
+    get:
+      operationId: listDatabases
+      tags:
+      - Databases
+      summary: List databases
+      description: Lists the databases within a tenant.
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: A list of databases.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Database'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createDatabase
+      tags:
+      - Databases
+      summary: Create a database
+      description: Creates a new database within a tenant.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabase'
+      responses:
+        '200':
+          description: The created database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v2/tenants/{tenant}/databases/{database}:
+    parameters:
+    - $ref: '#/components/parameters/Tenant'
+    - $ref: '#/components/parameters/Database'
+    get:
+      operationId: getDatabase
+      tags:
+      - Databases
+      summary: Get a database
+      description: Retrieves a database by name within a tenant.
+      responses:
+        '200':
+          description: The requested database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDatabase
+      tags:
+      - Databases
+      summary: Delete a database
+      description: Deletes a database and all collections within it.
+      responses:
+        '200':
+          description: Deletion result.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: Number of items to skip for pagination.
+      schema:
+        type: integer
+        minimum: 0
+    Database:
+      name: database
+      in: path
+      required: true
+      description: The database name.
+      schema:
+        type: string
+    Tenant:
+      name: tenant
+      in: path
+      required: true
+      description: The tenant name or UUID.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Database:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        tenant:
+          type: string
+    CreateDatabase:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    chromaToken:
+      type: apiKey
+      in: header
+      name: x-chroma-token
+      description: Chroma Cloud API key passed in the `x-chroma-token` header. Self-hosted servers can be run open (no auth) or configured with static-token or basic authentication; Chroma Cloud always requires a token.
