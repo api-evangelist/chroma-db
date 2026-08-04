@@ -1,0 +1,24 @@
+{
+  "provider": "chroma-db",
+  "sources": [
+    "chroma-db-collections-api-openapi.yml",
+    "chroma-db-databases-api-openapi.yml",
+    "chroma-db-query-api-openapi.yml",
+    "chroma-db-records-api-openapi.yml",
+    "chroma-db-system-api-openapi.yml",
+    "chroma-db-tenants-api-openapi.yml"
+  ],
+  "outputs": [
+    "chroma-db-collections-api-openapi.yml",
+    "chroma-db-databases-api-openapi.yml",
+    "chroma-db-query-api-openapi.yml",
+    "chroma-db-records-api-openapi.yml",
+    "chroma-db-system-api-openapi.yml",
+    "chroma-db-tenants-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
