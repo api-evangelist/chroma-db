@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2) Collections Query API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{x-chroma-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query a collection (similarity search)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/query",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip for pagination."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs nearest-neighbor vector similarity search over a collection. Supply one or more query embeddings and, optionally, metadata (`where`) and full-text (`where_document`) filters. Returns the closest records with the requested included fields."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

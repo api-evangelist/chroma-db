@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2) Collections System API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{x-chroma-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "System",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Heartbeat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/heartbeat"
+          },
+          "docs": "Returns the current server time in nanoseconds; used as a liveness check."
+        },
+        {
+          "info": {
+            "name": "Health check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/healthcheck"
+          },
+          "docs": "Returns the health status of the server."
+        },
+        {
+          "info": {
+            "name": "Get server version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/version"
+          },
+          "docs": "Returns the Chroma server version string."
+        },
+        {
+          "info": {
+            "name": "Pre-flight checks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/pre-flight-checks"
+          },
+          "docs": "Returns server limits and configuration used by clients before issuing requests, such as the maximum batch size."
+        },
+        {
+          "info": {
+            "name": "Reset the database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/reset"
+          },
+          "docs": "Deletes all data in the server. Only available on self-hosted deployments when ALLOW_RESET is explicitly enabled; not available on Chroma Cloud."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

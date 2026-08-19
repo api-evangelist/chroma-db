@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2) Collections Tenants API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{x-chroma-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tenants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a tenant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new tenant, the top-level isolation boundary for databases."
+        },
+        {
+          "info": {
+            "name": "Get a tenant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              }
+            ]
+          },
+          "docs": "Retrieves a tenant by name."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

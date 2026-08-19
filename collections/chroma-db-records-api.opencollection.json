@@ -1,0 +1,232 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2) Collections Records API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{x-chroma-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Records",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Count records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/count",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ]
+          },
+          "docs": "Returns the number of records (embeddings) in a collection."
+        },
+        {
+          "info": {
+            "name": "Add records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/add",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds records to a collection. Each record has an id and, optionally, an embedding, document, metadata, and URI. If embeddings are omitted, the collection's embedding function generates them from documents."
+        },
+        {
+          "info": {
+            "name": "Upsert records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/upsert",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Inserts new records or updates existing records matched by id."
+        },
+        {
+          "info": {
+            "name": "Update records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/update",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the embeddings, documents, metadata, or URIs of existing records by id."
+        },
+        {
+          "info": {
+            "name": "Get records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/get",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves records by id and/or by metadata (`where`) and document (`where_document`) filters, returning the included fields."
+        },
+        {
+          "info": {
+            "name": "Delete records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database/collections/:collection_id/delete",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The collection UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes records by id and/or by metadata and document filters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

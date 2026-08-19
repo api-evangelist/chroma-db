@@ -1,0 +1,410 @@
+{
+  "item": [
+    {
+      "id": "cc5a3f88-10a4-4b20-939b-a623550573b0",
+      "name": "Query",
+      "description": {
+        "content": "Nearest-neighbor vector similarity search over a collection.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "835fd916-6541-4f72-b053-87643e07989c",
+          "name": "Query a collection (similarity search)",
+          "request": {
+            "name": "Query a collection (similarity search)",
+            "description": {
+              "content": "Runs nearest-neighbor vector similarity search over a collection. Supply one or more query embeddings and, optionally, metadata (`where`) and full-text (`where_document`) filters. Returns the closest records with the requested included fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tenants",
+                ":tenant",
+                "databases",
+                ":database",
+                "collections",
+                ":collection_id",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of items to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "Number of items to skip for pagination."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tenant",
+                  "description": "(Required) The tenant name or UUID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "database",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "collection_id",
+                  "description": "(Required) The collection UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query_embeddings\": [\n    [\n      \"<float>\",\n      \"<float>\"\n    ],\n    [\n      \"<float>\",\n      \"<float>\"\n    ]\n  ],\n  \"n_results\": 10,\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"where\": {\n    \"key_0\": \"string\",\n    \"key_1\": 3263.6940763794255\n  },\n  \"where_document\": {\n    \"key_0\": true\n  },\n  \"include\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "62ea662d-15d0-49bc-bcd4-3419e2b65c0c",
+              "name": "Query results.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tenants",
+                    ":tenant",
+                    "databases",
+                    ":database",
+                    "collections",
+                    ":collection_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tenant",
+                      "description": "(Required) The tenant name or UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "collection_id",
+                      "description": "(Required) The collection UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-chroma-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query_embeddings\": [\n    [\n      \"<float>\",\n      \"<float>\"\n    ],\n    [\n      \"<float>\",\n      \"<float>\"\n    ]\n  ],\n  \"n_results\": 10,\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"where\": {\n    \"key_0\": \"string\",\n    \"key_1\": 3954.1122997500124\n  },\n  \"where_document\": {\n    \"key_0\": 2347.742825311664,\n    \"key_1\": 4435\n  },\n  \"include\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ids\": [\n    [\n      \"string\",\n      \"string\"\n    ],\n    [\n      \"string\",\n      \"string\"\n    ]\n  ],\n  \"distances\": [\n    [\n      6043.968580686161,\n      8460.827254288368\n    ],\n    [\n      5261.083740418005,\n      9035.436146284945\n    ]\n  ],\n  \"documents\": [\n    [\n      \"string\",\n      \"string\"\n    ],\n    [\n      \"string\",\n      \"string\"\n    ]\n  ],\n  \"metadatas\": [\n    [\n      {\n        \"key_0\": 8572.861806589324,\n        \"key_1\": 7822,\n        \"key_2\": 9003\n      },\n      {\n        \"key_0\": 2340,\n        \"key_1\": 1346\n      }\n    ],\n    [\n      {\n        \"key_0\": 5504\n      },\n      {\n        \"key_0\": 2200\n      }\n    ]\n  ],\n  \"embeddings\": [\n    [\n      [\n        3948.523950998237,\n        1664.1218591816144\n      ],\n      [\n        9310.620565099833,\n        4100.522959697009\n      ]\n    ],\n    [\n      [\n        293.008930086478,\n        4072.884049930268\n      ],\n      [\n        1594.4638227854734,\n        2281.4807469031693\n      ]\n    ]\n  ],\n  \"uris\": [\n    [\n      \"string\",\n      \"string\"\n    ],\n    [\n      \"string\",\n      \"string\"\n    ]\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "260ff1b3-720b-453d-9b28-f7afba88ef71",
+              "name": "Missing or invalid API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tenants",
+                    ":tenant",
+                    "databases",
+                    ":database",
+                    "collections",
+                    ":collection_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tenant",
+                      "description": "(Required) The tenant name or UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "collection_id",
+                      "description": "(Required) The collection UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-chroma-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query_embeddings\": [\n    [\n      \"<float>\",\n      \"<float>\"\n    ],\n    [\n      \"<float>\",\n      \"<float>\"\n    ]\n  ],\n  \"n_results\": 10,\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"where\": {\n    \"key_0\": \"string\",\n    \"key_1\": 3954.1122997500124\n  },\n  \"where_document\": {\n    \"key_0\": 2347.742825311664,\n    \"key_1\": 4435\n  },\n  \"include\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f74ad57-9e38-47f8-b23c-2e04cf3e2d2d",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tenants",
+                    ":tenant",
+                    "databases",
+                    ":database",
+                    "collections",
+                    ":collection_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tenant",
+                      "description": "(Required) The tenant name or UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "collection_id",
+                      "description": "(Required) The collection UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-chroma-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query_embeddings\": [\n    [\n      \"<float>\",\n      \"<float>\"\n    ],\n    [\n      \"<float>\",\n      \"<float>\"\n    ]\n  ],\n  \"n_results\": 10,\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"where\": {\n    \"key_0\": \"string\",\n    \"key_1\": 3954.1122997500124\n  },\n  \"where_document\": {\n    \"key_0\": 2347.742825311664,\n    \"key_1\": 4435\n  },\n  \"include\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.trychroma.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-chroma-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c2245f56-070e-4c97-a8ef-066d67c4d042",
+    "name": "Chroma Server API (v2) Collections Query API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma's HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.\nENDPOINTS MODELED: Path structure and the query-collection contract are grounded in the official Chroma reference docs (docs.trychroma.com) and the chroma-core sources. The exact request/response JSON SCHEMAS in this document are MODELED by API Evangelist from the documented client behavior and may differ in field-level detail from Chroma's own generated openapi.json served at `/openapi.json` on a running server. Treat schemas as representative, not authoritative; verify against your server's `/openapi.json`.\n\nContact Support:\n Name: Chroma",
+      "type": "text/plain"
+    }
+  }
+}

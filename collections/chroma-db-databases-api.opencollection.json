@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chroma Server API (v2) Collections Databases API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-chroma-token",
+      "value": "{{x-chroma-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Databases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List databases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip for pagination."
+              }
+            ]
+          },
+          "docs": "Lists the databases within a tenant."
+        },
+        {
+          "info": {
+            "name": "Create a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new database within a tenant."
+        },
+        {
+          "info": {
+            "name": "Get a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              }
+            ]
+          },
+          "docs": "Retrieves a database by name within a tenant."
+        },
+        {
+          "info": {
+            "name": "Delete a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.trychroma.com/api/v2/tenants/:tenant/databases/:database",
+            "params": [
+              {
+                "name": "tenant",
+                "value": "",
+                "type": "path",
+                "description": "The tenant name or UUID."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              }
+            ]
+          },
+          "docs": "Deletes a database and all collections within it."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
