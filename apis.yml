@@ -35,6 +35,19 @@ tags:
 - Similarity Search
 - RAG
 - Semantic Search
+- Artificial Intelligence
+- AI Inference
+- Machine-Learning
+- Open-Source
+tags_raw:
+- Vector Database
+- Vector Index
+- Vector Search
+- Vector Store
+- Embeddings
+- Similarity Search
+- RAG
+- Semantic Search
 - AI
 - AI Inference
 - Machine Learning
@@ -49,6 +62,8 @@ apis:
   humanURL: https://docs.trychroma.com/reference/chroma-reference
   baseURL: https://api.trychroma.com
   tags:
+  - Collection
+  tags_raw:
   - Collections
   properties:
   - type: OpenAPI
