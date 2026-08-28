@@ -12,6 +12,18 @@ description: Chroma (Chroma DB) is an open-source, AI-native vector database (em
   the records (embeddings) inside each collection - add, upsert, update, get,
   query (similarity search), and delete - and is the same interface used by the
   Python, JavaScript/TypeScript, Rust, and other client libraries.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
