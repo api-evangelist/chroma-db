@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Chroma Server API (v2) Collections Tenants API
   description: 'Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma''s HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.

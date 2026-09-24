@@ -19,6 +19,14 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "chroma-db-collections-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "chroma-db-databases-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "chroma-db-query-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "chroma-db-records-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "chroma-db-system-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "chroma-db-tenants-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

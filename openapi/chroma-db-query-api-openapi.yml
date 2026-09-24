@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Chroma Server API (v2) Collections Query API
   description: 'Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma''s HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.
@@ -54,58 +54,71 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return.
-      schema:
-        type: integer
-        minimum: 1
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: Number of items to skip for pagination.
-      schema:
-        type: integer
-        minimum: 0
-    CollectionId:
-      name: collection_id
-      in: path
-      required: true
-      description: The collection UUID.
-      schema:
-        type: string
-    Database:
-      name: database
-      in: path
-      required: true
-      description: The database name.
-      schema:
-        type: string
-    Tenant:
-      name: tenant
-      in: path
-      required: true
-      description: The tenant name or UUID.
-      schema:
-        type: string
   responses:
-    Unauthorized:
-      description: Missing or invalid API token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    QueryResult:
+      type: object
+      description: Results are returned as arrays-of-arrays, one inner array per query embedding.
+      properties:
+        ids:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        distances:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+              format: float
+        documents:
+          type: array
+          items:
+            type: array
+            items:
+              type:
+              - string
+              - 'null'
+        metadatas:
+          type: array
+          items:
+            type: array
+            items:
+              type:
+              - object
+              - 'null'
+              additionalProperties: true
+        embeddings:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+                format: float
+        uris:
+          type: array
+          items:
+            type: array
+            items:
+              type:
+              - string
+              - 'null'
     QueryRequest:
       type: object
       required:
@@ -138,54 +151,13 @@ components:
           additionalProperties: true
         include:
           $ref: '#/components/schemas/Include'
-    QueryResult:
+    Error:
       type: object
-      description: Results are returned as arrays-of-arrays, one inner array per query embedding.
       properties:
-        ids:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-        distances:
-          type: array
-          items:
-            type: array
-            items:
-              type: number
-              format: float
-        documents:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-              nullable: true
-        metadatas:
-          type: array
-          items:
-            type: array
-            items:
-              type: object
-              nullable: true
-              additionalProperties: true
-        embeddings:
-          type: array
-          items:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-                format: float
-        uris:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-              nullable: true
+        error:
+          type: string
+        message:
+          type: string
     Include:
       type: array
       description: Which fields to return in results.
@@ -197,13 +169,44 @@ components:
         - embeddings
         - metadatas
         - uris
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+    Database:
+      name: database
+      in: path
+      required: true
+      description: The database name.
+      schema:
+        type: string
+    Tenant:
+      name: tenant
+      in: path
+      required: true
+      description: The tenant name or UUID.
+      schema:
+        type: string
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: Number of items to skip for pagination.
+      schema:
+        type: integer
+        minimum: 0
+    CollectionId:
+      name: collection_id
+      in: path
+      required: true
+      description: The collection UUID.
+      schema:
+        type: string
   securitySchemes:
     chromaToken:
       type: apiKey

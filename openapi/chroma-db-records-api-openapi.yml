@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Chroma Server API (v2) Collections Records API
   description: 'Chroma is an open-source, AI-native vector (embedding) database for LLM, RAG, and semantic-search applications. This OpenAPI describes Chroma''s HTTP/REST v2 API, which is the same interface used by the Python, JavaScript/TypeScript, Rust, and other client libraries. The API is organized around a multi-tenancy hierarchy: tenants contain databases, databases contain collections, and collections contain records (embeddings with documents, metadata, and URIs). The core write and read operations are add, upsert, update, get, query (nearest-neighbor similarity search), and delete.
@@ -179,41 +179,6 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    CollectionId:
-      name: collection_id
-      in: path
-      required: true
-      description: The collection UUID.
-      schema:
-        type: string
-    Database:
-      name: database
-      in: path
-      required: true
-      description: The database name.
-      schema:
-        type: string
-    Tenant:
-      name: tenant
-      in: path
-      required: true
-      description: The tenant name or UUID.
-      schema:
-        type: string
   schemas:
     AddRecords:
       type: object
@@ -235,19 +200,22 @@ components:
         documents:
           type: array
           items:
-            type: string
-            nullable: true
+            type:
+            - string
+            - 'null'
         metadatas:
           type: array
           items:
-            type: object
-            nullable: true
+            type:
+            - object
+            - 'null'
             additionalProperties: true
         uris:
           type: array
           items:
-            type: string
-            nullable: true
+            type:
+            - string
+            - 'null'
     GetResult:
       type: object
       properties:
@@ -258,13 +226,15 @@ components:
         documents:
           type: array
           items:
-            type: string
-            nullable: true
+            type:
+            - string
+            - 'null'
         metadatas:
           type: array
           items:
-            type: object
-            nullable: true
+            type:
+            - object
+            - 'null'
             additionalProperties: true
         embeddings:
           type: array
@@ -276,21 +246,9 @@ components:
         uris:
           type: array
           items:
-            type: string
-            nullable: true
-    DeleteRecords:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-        where:
-          type: object
-          additionalProperties: true
-        where_document:
-          type: object
-          additionalProperties: true
+            type:
+            - string
+            - 'null'
     GetRecords:
       type: object
       properties:
@@ -312,6 +270,13 @@ components:
           type: integer
         include:
           $ref: '#/components/schemas/Include'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     Include:
       type: array
       description: Which fields to return in results.
@@ -323,13 +288,54 @@ components:
         - embeddings
         - metadatas
         - uris
-    Error:
+    DeleteRecords:
       type: object
       properties:
-        error:
-          type: string
-        message:
-          type: string
+        ids:
+          type: array
+          items:
+            type: string
+        where:
+          type: object
+          additionalProperties: true
+        where_document:
+          type: object
+          additionalProperties: true
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Database:
+      name: database
+      in: path
+      required: true
+      description: The database name.
+      schema:
+        type: string
+    Tenant:
+      name: tenant
+      in: path
+      required: true
+      description: The tenant name or UUID.
+      schema:
+        type: string
+    CollectionId:
+      name: collection_id
+      in: path
+      required: true
+      description: The collection UUID.
+      schema:
+        type: string
   securitySchemes:
     chromaToken:
       type: apiKey
